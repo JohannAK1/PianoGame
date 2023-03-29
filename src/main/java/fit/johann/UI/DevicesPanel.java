@@ -27,6 +27,11 @@ public class DevicesPanel {
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    midiController.stopScanning();
+                } catch (CoreMidiException ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.out.println(midiController.getSelectedDevice(deviceList.getSelectedIndex()));
             }
         });
