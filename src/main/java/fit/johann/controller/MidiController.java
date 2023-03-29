@@ -11,6 +11,10 @@ import java.util.ArrayList;
 
 public class MidiController {
 
+    public ArrayList<MidiDevice> getAvailableDevices() {
+        return availableDevices;
+    }
+
     //List of available Devices
     private ArrayList<MidiDevice> availableDevices;
 
@@ -30,8 +34,9 @@ public class MidiController {
      */
     public void watchForMidiChanges() throws CoreMidiException {
         CoreMidiDeviceProvider.addNotificationListener(() -> {
+            availableDevices = new ArrayList<>();
+            System.out.println("Test");
             for (MidiDevice.Info i : CoreMidiDeviceProvider.getMidiDeviceInfo()){
-                availableDevices = new ArrayList<>();
                 try {
                     availableDevices.add(MidiSystem.getMidiDevice(i));
                 } catch (MidiUnavailableException e) {
@@ -49,8 +54,11 @@ public class MidiController {
         return deviceNames;
     }
 
-    public MidiController() throws CoreMidiException {
+    public MidiController() throws CoreMidiException, MidiUnavailableException {
         availableDevices = new ArrayList<>();
+        for (MidiDevice.Info info : CoreMidiDeviceProvider.getMidiDeviceInfo()){
+            availableDevices.add(MidiSystem.getMidiDevice(info));
+        }
         if(!isCoreMidiLoaded()){
             throw new IllegalStateException("Library failed to load");
         }

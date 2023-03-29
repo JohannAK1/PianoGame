@@ -3,7 +3,6 @@ package fit.johann.UI;
 import fit.johann.controller.MidiController;
 import uk.co.xfactorylibrarians.coremidi4j.CoreMidiException;
 
-import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,18 +10,23 @@ import java.awt.event.ActionListener;
 
 public class DevicesPanel {
     private JTextField title;
-    private JList deviceList;
+    private JList<String> deviceList;
     private JButton selectButton;
     private JButton refreshButton;
     JPanel devicePanel;
 
     MidiController midiController;
 
-    public DevicesPanel() throws MidiUnavailableException, CoreMidiException {
+    public DevicesPanel() throws CoreMidiException, MidiUnavailableException {
 
         midiController = new MidiController();
-
+        midiController.watchForMidiChanges();
         deviceList.setModel(midiController.getDeviceNames());
+
+
+        System.out.println(midiController.getAvailableDevices().size());
+
+
 
         selectButton.addActionListener(new ActionListener() {
             @Override
@@ -34,13 +38,9 @@ public class DevicesPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(midiController.getDeviceNames().size());
-                try {
-                    midiController.watchForMidiChanges();
-                } catch (CoreMidiException ex) {
-                    throw new RuntimeException(ex);
-                }
                 deviceList.setModel(midiController.getDeviceNames());
                 devicePanel.repaint();
+                devicePanel.getParent().repaint();
             }
         });
     }
