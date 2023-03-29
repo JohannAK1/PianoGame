@@ -24,10 +24,6 @@ public class DevicesPanel {
         deviceList.setModel(midiController.getDeviceNames());
 
 
-        System.out.println(midiController.getAvailableDevices().size());
-
-
-
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
