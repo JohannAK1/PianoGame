@@ -5,11 +5,9 @@ import uk.co.xfactorylibrarians.coremidi4j.CoreMidiException;
 
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class DevicesPanel {
-    private JTextField title;
+    private JLabel title;
     private JList<String> deviceList;
     private JButton selectButton;
     private JButton refreshButton;
@@ -17,43 +15,38 @@ public class DevicesPanel {
 
     MidiController midiController;
 
+    /**
+     * Constructor that creates a JPanel, in which a user can select a desired MIDI device
+     * @throws CoreMidiException Library Error
+     * @throws MidiUnavailableException MIDI connection Error
+     */
     public DevicesPanel() throws CoreMidiException, MidiUnavailableException {
 
         midiController = new MidiController();
-        midiController.watchForMidiChanges();
         deviceList.setModel(midiController.getDeviceNames());
 
-
-        selectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    midiController.stopScanning();
-                } catch (CoreMidiException ex) {
-                    throw new RuntimeException(ex);
-                }
-                System.out.println(midiController.getSelectedDevice(deviceList.getSelectedIndex()));
+        // button to selecting the device
+        selectButton.addActionListener(e -> {
+            try {
+                midiController.stopScanning();
+            } catch (CoreMidiException ex) {
+                throw new RuntimeException(ex);
             }
+            System.out.println(midiController.getSelectedDevice(deviceList.getSelectedIndex()));
         });
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(midiController.getDeviceNames().size());
-                deviceList.setModel(midiController.getDeviceNames());
-                devicePanel.repaint();
-                devicePanel.getParent().repaint();
-            }
+
+        // Button to refresh the list of available devices
+        refreshButton.addActionListener(e -> {
+            System.out.println(midiController.getDeviceNames().size());
+            deviceList.setModel(midiController.getDeviceNames());
+            devicePanel.repaint();
+            devicePanel.getParent().repaint();
         });
     }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
-
 
     public static void main(String[] args) throws MidiUnavailableException, CoreMidiException {
         JFrame fs = new JFrame();
-        fs.setSize(400,400);
+        fs.setSize(1000,1000);
         fs.setContentPane(new DevicesPanel().devicePanel);
         fs.setVisible(true);
         fs.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
