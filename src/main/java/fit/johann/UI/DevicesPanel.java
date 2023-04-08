@@ -1,5 +1,6 @@
 package fit.johann.UI;
 
+import fit.johann.controller.GUIController;
 import fit.johann.controller.MidiController;
 import uk.co.xfactorylibrarians.coremidi4j.CoreMidiException;
 
@@ -11,8 +12,12 @@ public class DevicesPanel {
     private JList<String> deviceList;
     private JButton selectButton;
     private JButton refreshButton;
-    JPanel devicePanel;
 
+    public JPanel getDevicePanel() {
+        return devicePanel;
+    }
+
+    JPanel devicePanel;
     MidiController midiController;
 
     /**
@@ -20,7 +25,7 @@ public class DevicesPanel {
      * @throws CoreMidiException Library Error
      * @throws MidiUnavailableException MIDI connection Error
      */
-    public DevicesPanel() throws CoreMidiException, MidiUnavailableException {
+    public DevicesPanel(GUIController controller) throws CoreMidiException, MidiUnavailableException {
 
         midiController = new MidiController();
         deviceList.setModel(midiController.getDeviceNames());
@@ -30,6 +35,11 @@ public class DevicesPanel {
             try {
                 midiController.stopScanning();
             } catch (CoreMidiException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                controller.keyInputTest(midiController.getSelectedDevice(deviceList.getSelectedIndex()));
+            } catch (MidiUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
             System.out.println(midiController.getSelectedDevice(deviceList.getSelectedIndex()));
@@ -42,14 +52,5 @@ public class DevicesPanel {
             devicePanel.repaint();
             devicePanel.getParent().repaint();
         });
-    }
-
-    public static void main(String[] args) throws MidiUnavailableException, CoreMidiException {
-        JFrame fs = new JFrame();
-        fs.setSize(1000,1000);
-        fs.setContentPane(new DevicesPanel().devicePanel);
-        fs.setVisible(true);
-        fs.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
     }
 }
