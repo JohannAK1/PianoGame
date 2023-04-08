@@ -9,9 +9,16 @@ import java.awt.*;
 
 public class KeyBoardPanel extends JPanel {
 
-    private int keyHeight;
-    private int keyWidth;
-    private PianoLayout layout;
+    private final int keyHeight;
+    private final int keyWidth;
+    private final PianoLayout layout;
+
+    /**
+     * Creates a JPanel with the PianoKeyLayout
+     * @param width screen width
+     * @param height screen height
+     * @param layout DataConstruct of the piano keys
+     */
     public KeyBoardPanel(int width, int height, PianoLayout layout){
         this.setSize(width,height);
         keyWidth = (width / 52)-2;
@@ -19,12 +26,21 @@ public class KeyBoardPanel extends JPanel {
         System.out.println("Panel instantiated");
         this.layout = layout;
     }
+
+    /**
+     * If panel repaint, then repaint keys
+     * @param g the <code>Graphics</code> object to protect
+     */
     @Override
     public void paintComponent(Graphics g){
         //super.paint(g);
         paintKeys(g);
     }
 
+    /**
+     * Paints all the keys from pianoLayout with their
+     * @param g Graphic
+     */
     private void paintKeys(Graphics g){
         PianoKey[] keys = layout.getKeys();
         int pos = 0;

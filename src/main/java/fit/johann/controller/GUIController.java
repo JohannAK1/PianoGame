@@ -14,17 +14,24 @@ import javax.swing.*;
 
 public class GUIController {
     private final JFrame k;
+
+    /**
+     * Creates a new JFrame and adds the MainWindow.
+     */
     public GUIController(){
         k = new JFrame();
-        k.setSize(400,400);
+        k.setSize(1000,1000);
         MainWindow window = new MainWindow(this);
         k.setContentPane(window.getPanel1());
         k.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         k.setVisible(true);
     }
 
+    /**
+     * Switches the current panel with the devicePanel
+     */
     public void deviceConnectionWindow(){
-        DevicesPanel panel = null;
+        DevicesPanel panel;
         try {
             panel = new DevicesPanel(this);
         } catch (CoreMidiException | MidiUnavailableException e) {
@@ -34,7 +41,11 @@ public class GUIController {
         k.validate();
     }
 
-
+    /**
+     * Panel switch: current -> keyInputTest
+     * @param device selected E-Piano / MidiDevice
+     * @throws MidiUnavailableException Midi Connection Error
+     */
     public void keyInputTest(MidiDevice device) throws MidiUnavailableException {
         PianoLayout layout = new PianoLayout();
         KeyBoardPanel keyBoardPanel = new KeyBoardPanel(k.getWidth(),k.getHeight(),layout);
@@ -43,6 +54,5 @@ public class GUIController {
         device.open();
         Transmitter transmitter = device.getTransmitter();
         transmitter.setReceiver(new MyMidiInputReceiver(layout,k));
-
     }
 }

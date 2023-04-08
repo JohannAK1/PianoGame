@@ -1,13 +1,10 @@
 package fit.johann.UI;
 
 import fit.johann.controller.GUIController;
-import uk.co.xfactorylibrarians.coremidi4j.CoreMidiException;
-
-import javax.sound.midi.MidiUnavailableException;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+
+@SuppressWarnings("unused")
 public class MainWindow {
     private JButton nextWindow;
 
@@ -19,12 +16,8 @@ public class MainWindow {
     private JLabel title;
 
     public MainWindow (GUIController controller){
-        nextWindow.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.deviceConnectionWindow();
-            }
-        });
+
+        nextWindow.addActionListener(e -> controller.deviceConnectionWindow());
     }
 
 }

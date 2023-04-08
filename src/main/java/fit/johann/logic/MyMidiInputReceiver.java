@@ -8,12 +8,11 @@ import javax.swing.*;
 
 
 public class MyMidiInputReceiver implements Receiver {
-    private PianoLayout layout;
+    private final PianoLayout layout;
     private final JFrame frame;
     public MyMidiInputReceiver(PianoLayout pianoLayout, JFrame frame){
         System.out.println("Receiver instantiated");
         this.frame = frame;
-        this.layout = pianoLayout;
         this.layout = pianoLayout;
     }
 
