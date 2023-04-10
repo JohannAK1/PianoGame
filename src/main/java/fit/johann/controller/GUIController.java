@@ -4,7 +4,7 @@ import fit.johann.UI.DevicesPanel;
 import fit.johann.UI.KeyBoardPanel;
 import fit.johann.UI.MainWindow;
 import fit.johann.logic.MyMidiInputReceiver;
-import fit.johann.model.PianoLayout;
+import fit.johann.model.pianolayout.PianoLayout;
 import uk.co.xfactorylibrarians.coremidi4j.CoreMidiException;
 
 import javax.sound.midi.MidiDevice;

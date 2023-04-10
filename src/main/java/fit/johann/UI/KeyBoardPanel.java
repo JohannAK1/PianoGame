@@ -1,7 +1,7 @@
 package fit.johann.UI;
 
-import fit.johann.model.PianoKey;
-import fit.johann.model.PianoLayout;
+import fit.johann.model.pianolayout.PianoKey;
+import fit.johann.model.pianolayout.PianoLayout;
 
 import javax.swing.*;
 import java.awt.*;

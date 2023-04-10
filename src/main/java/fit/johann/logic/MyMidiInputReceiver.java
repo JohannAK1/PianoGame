@@ -1,6 +1,6 @@
 package fit.johann.logic;
 
-import fit.johann.model.PianoLayout;
+import fit.johann.model.pianolayout.PianoLayout;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;

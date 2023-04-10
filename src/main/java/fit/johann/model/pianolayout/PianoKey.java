@@ -1,4 +1,4 @@
-package fit.johann.model;
+package fit.johann.model.pianolayout;
 
 import java.awt.*;
 
