@@ -4,11 +4,13 @@ public class GameBoard {
 
     private final Sector[] board;
 
+    private final int size;
     /**
      * Create a new GameBoard with a specific size
      * @param size board size
      */
     public GameBoard(int size) {
+        this.size = size;
         // Board Size
         board = new Sector[size*size];
         createWater();
@@ -40,5 +42,17 @@ public class GameBoard {
         board[location].wasHit();
     }
 
+    /**
+     * @return the board
+     */
+    public Sector[] getBoard() {
+        return board;
+    }
 
+    /**
+     * @return Size of Gameboard
+     */
+    public int getSize() {
+        return size;
+    }
 }
