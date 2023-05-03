@@ -70,22 +70,16 @@ public class PlacementPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        Painter p = new Painter(this.getWidth()/boardSize, this.getHeight()/boardSize);
+        int sectorWidth = this.getWidth()/boardSize;
+        int sectorHeight = this.getHeight()/boardSize;
         //super.paint(g);
         try {
-            p.paintBoard(g,gameBoard);
-
-
-            p.paintShip(g,selectedShip,(int) shipPostion.getX(),(int) shipPostion.getY(),shipRotation);
-
-
+            Painter.paintBoard(g,gameBoard,sectorWidth,sectorHeight);
+            Painter.paintShip(g,selectedShip,(int) shipPostion.getX(),(int) shipPostion.getY(),shipRotation,sectorWidth,sectorHeight);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
     public void setSelectedShip(SectorType shipType) {
         this.selectedShip = shipType;
     }

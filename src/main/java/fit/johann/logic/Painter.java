@@ -8,17 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import static fit.johann.logic.OpenSimplex2S.noise2;
+
 public class Painter {
-
-
-    private final int sectorWidth;
-    private final int sectorHeight;
-
-    public Painter(int sectorWidth, int sectorHeight){
-        this.sectorWidth = sectorWidth;
-        this.sectorHeight = sectorHeight;
-
-    }
 
     /**
      * Paints a ship at a specific Location
@@ -27,13 +19,15 @@ public class Painter {
      * @param xCord x Coordinate of startpostion
      * @param yCord y Coordinate of startpostion
      * @param rotation rotation of ship
+     * @param sectorWidth width of sector (screen width / board size)
+     * @param sectorHeight height of sector (screen height / board size)
      * @throws IOException helperMethod loads Imagefiles that could produce exceptions
      */
-    public void paintShip(Graphics g, SectorType type, int xCord, int yCord, int rotation) throws IOException {
+    public static void paintShip(Graphics g, SectorType type, int xCord, int yCord, int rotation, int sectorWidth, int sectorHeight) throws IOException {
         for (int i = 1; i <= type.length; i++){
             switch (rotation){
-                case 0 -> paintShipPart(g,type,i,xCord,yCord+(i-1),rotation);
-                case 1 -> paintShipPart(g,type,i,xCord-(i-1),yCord,rotation);
+                case 0 -> paintShipPart(g,type,i,xCord,yCord+(i-1),rotation, sectorWidth, sectorHeight);
+                case 1 -> paintShipPart(g,type,i,xCord-(i-1),yCord,rotation, sectorWidth, sectorHeight);
             }
         }
 
@@ -47,17 +41,12 @@ public class Painter {
      * @param xCord x Coordinate of location
      * @param yCord y Coordinate of location
      * @param rotation rotation of shipPart
+     * @param sectorWidth width of sector (screen width / board size)
+     * @param sectorHeight height of sector (screen height / board size)
      * @throws IOException loads Imagefiles that could produce exceptions
      */
-    private void paintShipPart(Graphics g, SectorType type, int part, int xCord, int yCord, int rotation) throws IOException {
-        String filePath = "/Users/johannarfmann-knubel/Documents/JavaProjects/PianoGame/src/main/resources/boat_Img/";
-        switch (type){
-            case UBOAT -> filePath = filePath +"uboat" + part + ".png";
-            case CARRIER -> filePath = filePath +"carrier" + part + ".png";
-            case CRUISER -> filePath = filePath +"cruiser" + part + ".png";
-            case BATTLESHIP -> filePath = filePath +"battleship" + part + ".png";
-        }
-        File f = new File(filePath);
+    private static void paintShipPart(Graphics g, SectorType type, int part, int xCord, int yCord, int rotation, int sectorWidth, int sectorHeight) throws IOException {
+        File f = new File(type.pngFiles[part-1]);
         BufferedImage img = ImageIO.read(f);
         for(int i = 0; i < rotation; i++){
             img = rotateClockwise90(img);
@@ -71,9 +60,11 @@ public class Painter {
      * Paints the game board
      * @param g Graphics painter
      * @param gameBoard gameBoard object
+     * @param sectorWidth width of sector (screen width / board size)
+     * @param sectorHeight height of sector (screen height / board size)
      * @throws IOException helperMethod loads Imagefiles that could produce exceptions
      */
-    public void paintBoard(Graphics g, GameBoard gameBoard) throws IOException {
+    public static void paintBoard(Graphics g, GameBoard gameBoard, int sectorWidth, int sectorHeight) throws IOException {
         Sector[] board = gameBoard.getBoard();
         int boardWidth = gameBoard.getSize();
         int row = -1;
@@ -81,23 +72,27 @@ public class Painter {
         for(int i = 0; i < board.length; i++){
             int indexInROW = i % boardWidth;
             if(indexInROW == 0) row++;
-            g.fillRect(indexInROW*sectorWidth,row*sectorHeight,sectorWidth-2,sectorHeight-2);
+
+            paintShipPart(g,SectorType.WATER,1,indexInROW,row,1,sectorWidth-2,sectorHeight-2);
+            //g.fillRect(indexInROW*sectorWidth,row*sectorHeight,sectorWidth-2,sectorHeight-2);
         }
-        paintShips(g,gameBoard);
+        paintShips(g,gameBoard,sectorWidth,sectorHeight);
+        //paintNoise(g);
     }
 
     /**
      * Helper Method for paintBoard, only paints the ships
      * @param g Graphics painter
      * @param board gameBoard object
+     * @param sectorWidth width of sector (screen width / board size)
+     * @param sectorHeight height of sector (screen height / board size)
      * @throws IOException helperMethod loads Imagefiles that could produce exceptions
      */
-    private void paintShips(Graphics g, GameBoard board) throws IOException {
+    private static void paintShips(Graphics g, GameBoard board, int sectorWidth, int sectorHeight) throws IOException {
         for (ShipData data: board.getShipData()){
-            paintShip(g,data.type(),data.xCord(),data.yCord(),data.rotation());
+            paintShip(g,data.type(),data.xCord(),data.yCord(),data.rotation(),sectorWidth,sectorHeight);
         }
     }
-
 
     /**
      * Rotates a buffered image clockwise by 90 degrees
@@ -118,6 +113,23 @@ public class Painter {
         return dest;
     }
 
+    private static void paintNoise(Graphics g){
+        long seed = 32962364;
+        for(float i = 0; i < 15; i+=0.01){
+            for(float x = 0; x < 15; x+=0.01){
+                g.setColor(Color.blue);
+                if(-0.2<noise2(seed,i,x) && 0.2>noise2(seed,i,x)){
+                    g.setColor(Color.CYAN);
+                }
+                if((-0.3<noise2(seed,i,x) && -0.2>noise2(seed,i,x)) || (0.2<noise2(seed,i,x) && 0.3>noise2(seed,i,x))){
+                    g.setColor(Color.WHITE);
+                }
+                int k = (int) (i * 100);
+                int b = (int) (x * 100);
+                g.fillRect(k,b,1,1);
+            }
+        }
+    }
 
 
 

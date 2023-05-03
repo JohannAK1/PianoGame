@@ -5,53 +5,44 @@ import fit.johann.model.battleship.SectorType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class ShipSelectPanel extends JPanel {
 
     private final PlacementPanel boardView;
-    private final JButton[] shipButtons = {new JButton("Cruiser"), new JButton("Battleship"), new JButton("Carrier"), new JButton("UBoat")};
     private final Container shipContainer = new Container();
+    private final ArrayList<JButton> shipButtons = new ArrayList<>();
 
+    /**
+     * Iterates through all the SectorTypes, if a sector has the type ship, than a button will be created,
+     * which also changes the current selected ship in class: boardView. And adds the newly created
+     * button to shipContainer.
+     */
+    private void generateButtons(){
+        for (SectorType type : SectorType.values()){
+            if(type.isShip){
+                JButton k = new JButton(type.name);
+                k.addActionListener(e -> boardView.setSelectedShip(type));
+                shipButtons.add(k);
+                shipContainer.add(k);
+            }
 
-    private final ActionListener actionListener1 = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            boardView.setSelectedShip(SectorType.CRUISER);
         }
-    };
-    private final ActionListener actionListener2 = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            boardView.setSelectedShip(SectorType.BATTLESHIP);
-        }
-    };
-    private final ActionListener actionListener3 = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            boardView.setSelectedShip(SectorType.CARRIER);
-        }
-    };
-    private final ActionListener actionListener4 = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            boardView.setSelectedShip(SectorType.UBOAT);
-        }
-    };
+    }
 
-
-
-
-
+    /**
+     * Creates a panel which is used to choose the locations of the ships by creating
+     * a gameBoard which contains all the ship + board data and a BoardView JPanel which
+     * is used to choose the location
+     * @param size GameBoard size
+     */
     public ShipSelectPanel(int size) {
         GameBoard gameBoard = new GameBoard(size);
         this.boardView = new PlacementPanel(gameBoard,size);
         this.setLayout(new BorderLayout());
 
-        buttonCreation();
-
-        shipContainer.setLayout(new GridLayout(1,4));
+        generateButtons();
+        shipContainer.setLayout(new GridLayout(1, shipButtons.size()));
 
 
         this.add(boardView, BorderLayout.CENTER);
@@ -60,22 +51,6 @@ public class ShipSelectPanel extends JPanel {
 
 
 
-    private void buttonCreation(){
-        for (int i = 0; i < shipButtons.length; i++) {
-            if(i == 0){
-                shipButtons[i].addActionListener(actionListener1);
-            } else if (i == 1) {
-                shipButtons[i].addActionListener(actionListener2);
-            }
-            else if (i == 2) {
-                shipButtons[i].addActionListener(actionListener3);
-            }
-            else {
-                shipButtons[i].addActionListener(actionListener4);
-            }
-            shipContainer.add(shipButtons[i]);
-        }
-    }
 
 
 
