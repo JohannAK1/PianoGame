@@ -1,5 +1,10 @@
 package fit.johann.model.battleship;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public enum SectorType {
     MINE (1, "", false, "Mine"),
     WATER (1, "src/main/resources/boat_Img/water",false, "Water"),
@@ -30,5 +35,13 @@ public enum SectorType {
             int part = i+1;
             this.pngFiles[i] = (filePath + part + ".png");
         }
+    }
+
+    public BufferedImage[] getImages() throws IOException {
+        BufferedImage[] images = new BufferedImage[length];
+        for (int i = 0; i < length; i++){
+            images[i] = (ImageIO.read(new File(pngFiles[i])));
+        }
+        return images;
     }
 }

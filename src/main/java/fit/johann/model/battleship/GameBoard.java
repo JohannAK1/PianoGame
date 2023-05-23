@@ -1,10 +1,12 @@
 package fit.johann.model.battleship;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GameBoard {
 
     private final Sector[] board;
+
 
     private final ArrayList<ShipData> shipData = new ArrayList<>();
 
@@ -14,6 +16,7 @@ public class GameBoard {
      * @param size board size
      */
     public GameBoard(int size) {
+
         this.size = size;
         // Board Size
         board = new Sector[size*size];

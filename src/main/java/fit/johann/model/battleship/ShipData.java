@@ -7,4 +7,6 @@ package fit.johann.model.battleship;
  * @param yCord y Coordinate of startpostion
  * @param rotation rotation of the ship
  */
+
 public record ShipData(SectorType type, int xCord,int yCord, int rotation) {}
+

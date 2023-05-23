@@ -77,7 +77,6 @@ public class Painter {
             //g.fillRect(indexInROW*sectorWidth,row*sectorHeight,sectorWidth-2,sectorHeight-2);
         }
         paintShips(g,gameBoard,sectorWidth,sectorHeight);
-        //paintNoise(g);
     }
 
     /**
@@ -113,19 +112,23 @@ public class Painter {
         return dest;
     }
 
+    /**
+     * Not Used could paint the Background procedural with noise function
+     * @param g Graphics Painter
+     */
     private static void paintNoise(Graphics g){
         long seed = 32962364;
         for(float i = 0; i < 15; i+=0.01){
-            for(float x = 0; x < 15; x+=0.01){
+            for(float r = 0; r < 15; r+=0.01){
                 g.setColor(Color.blue);
-                if(-0.2<noise2(seed,i,x) && 0.2>noise2(seed,i,x)){
+                if(-0.2<noise2(seed,i,r) && 0.2>noise2(seed,i,r)){
                     g.setColor(Color.CYAN);
                 }
-                if((-0.3<noise2(seed,i,x) && -0.2>noise2(seed,i,x)) || (0.2<noise2(seed,i,x) && 0.3>noise2(seed,i,x))){
+                if((-0.3<noise2(seed,i,r) && -0.2>noise2(seed,i,r)) || (0.2<noise2(seed,i,r) && 0.3>noise2(seed,i,r))){
                     g.setColor(Color.WHITE);
                 }
                 int k = (int) (i * 100);
-                int b = (int) (x * 100);
+                int b = (int) (r * 100);
                 g.fillRect(k,b,1,1);
             }
         }

@@ -1,0 +1,23 @@
+Gameobject: 
+- name (id) 
+- length (how many tiles) 
+- bufferedimage[length] = tiles 
+- rotation 
+
+
+Gameboard: 
+- id
+- arraylist(gameobject) one to many
+- araaylist (point): hits 
+- int size 
+
+ShipInfo: 
+- Gameobject .class Object 
+- rotation 
+- GameBoard
+
+
+
+ 
+
+
